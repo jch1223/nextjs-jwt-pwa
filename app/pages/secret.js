@@ -3,8 +3,7 @@ import axios from "axios";
 import { Cookies } from "react-cookie";
 import { handleAuthSSR } from "../utils/auth";
 import LogoutBtn from "../components/LogoutBtn";
-
-const serverUrl = "http://localhost:3001";
+import { serverUrl } from "../config.json"
 
 // set up cookies
 const cookies = new Cookies();

@@ -1,14 +1,35 @@
 {
   "dependencies": {
+    "@zeit/next-css": "^1.0.1",
+    "@zeit/next-sass": "^1.0.1",
+    "animate.css": "^3.7.2",
     "axios": "^0.18.0",
+    "babel-plugin-styled-components": "^1.10.7",
+    "bootstrap": "^4.5.0",
     "eslint": "^5.12.1",
-    "next": "^7.0.2",
+    "html-react-parser": "^0.9.1",
+    "isomorphic-unfetch": "^3.0.0",
+    "next": "^9.4.4",
+    "next-pwa": "^2.4.1",
+    "node-sass": "^4.14.1",
     "react": "^16.7.0",
+    "react-animate-on-scroll": "^2.1.5",
+    "react-app-polyfill": "^1.0.6",
     "react-cookie": "^3.0.8",
     "react-dom": "^16.7.0",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-slick": "^0.25.2",
+    "reactstrap": "^8.4.1",
+    "slick-carousel": "^1.8.1",
+    "styled-components": "^4.3.2",
     "universal-cookie": "^3.0.7"
   },
   "scripts": {
-    "start": "next"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next",
+    "build": "next build",
+    "prestart": "next build",
+    "start": "next start"
   }
 }

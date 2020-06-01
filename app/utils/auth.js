@@ -3,7 +3,7 @@ import Router from 'next/router';
 import { Cookies } from 'react-cookie';
 // set up cookies
 const cookies = new Cookies();
-const serverUrl = 'http://localhost:3001';
+import { serverUrl } from "../config.json"
 
 export async function handleAuthSSR(ctx) {
   let token = null;
