@@ -38,6 +38,7 @@ class Index extends React.Component {
     console.log(this.installPrompt)
 
     if (!this.installPrompt) {
+      alert('이미 다운로드 했습니다')
       return false;
     }
 
