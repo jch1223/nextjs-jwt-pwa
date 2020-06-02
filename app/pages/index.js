@@ -85,7 +85,7 @@ class Index extends React.Component {
         <div>Token: {this.state.token}</div>
         <br></br>
 
-        <Link href="/secret">
+        <Link href="/secret" prefetch={false}>
           <a>Secret page</a>
         </Link>
       </div>
