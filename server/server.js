@@ -71,7 +71,8 @@ app.get("/api/login", (req, res) => {
   // generate a constant token, no need to be fancy here
   const token = jwt.sign({ username: "prima" }, jwtSecret, { expiresIn: 60 }); // 1 min token
   // return it back
-  res.json({ token: token });
+  console.log('login call : ', token)
+  return res.send({ token: token });
 });
 
 app.get("/api/token/ping", (req, res) => {

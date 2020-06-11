@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link.js";
 
 import axios from "axios";
@@ -6,91 +6,65 @@ import { Cookies } from "react-cookie";
 
 import LogoutBtn from "../components/LogoutBtn.jsx";
 import { serverUrl } from "../config.json"
+import fetch from "isomorphic-unfetch"
 
-// set up cookies
-const cookies = new Cookies();
-class Index extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      token: cookies.get("token") || null,
-    };
-  }
+const Index = ({ promptInstall }) => {
+  const cookies = new Cookies();
 
-  installPrompt = null;
+  const [token, setToken] = useState(null)
 
-  componentDidMount() {
-    console.log("Listening for Install prompt");
-    window.addEventListener('beforeinstallprompt', e => {
-      // For older browsers
-      e.preventDefault();
-      console.log("Install Prompt fired");
-      this.installPrompt = e;
-      // See if the app is already installed, in that case, do nothing
-      if ((window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true) {
-        return false;
-      }
-    })
-  }
+  useEffect(() => {
+    setToken(cookies.get("token"))
+  }, [])
 
-  installApp = async () => {
-    console.log('clicked')
-    console.log(this.installPrompt)
+  const installApp = async () => {
+    console.log(promptInstall)
 
-    if (!this.installPrompt) {
-      alert('이미 다운로드 했습니다')
-      return false;
+    if (!promptInstall) {
+      return;
     }
 
-    this.installPrompt.prompt();
+    promptInstall.prompt();
 
-    let outcome = await this.installPrompt.userChoice;
+    let outcome = await promptInstall.userChoice;
 
     if (outcome.outcome == 'accepted') {
       console.log('App Installed');
     } else {
       console.log('App not installed');
     }
-    // Remove the event reference
-    this.installPrompt = null;
-    // Hide the button
-    // setInstallButton(false)
   };
 
-  onLoginClick = async () => {
+  const onLoginClick = async () => {
     console.log("Login called");
-    const response = await axios.get(serverUrl + "/api/login");
-    const token = response.data.token;
+
+    const token = await fetch(`${serverUrl}/api/login`)
+      .then((response) => response.json())
+      .then(data => data.token)
+      .catch(error => {
+        throw error
+      })
+
+    setToken(token);
     cookies.set("token", token);
-    this.setState({
-      token: token,
-    });
   };
 
-  tokenHandler = () => {
-    this.setState({
-      token: null,
-    });
-  };
+  return (
+    <div>
+      <h2>Main page</h2>
+      <br></br>
+      <button onClick={onLoginClick}>Get Token</button>
+      <LogoutBtn cookies={cookies} />
+      <button onClick={installApp}>다운로드</button>
+      <br></br>
+      <div>Token: {token}</div>
+      <br></br>
 
-  render() {
-    return (
-      <div>
-        <h2>Main page</h2>
-        <br></br>
-        <button onClick={() => this.onLoginClick()}>Get Token</button>
-        <LogoutBtn cookies={cookies} tokenHandler={this.tokenHandler} />
-        <button onClick={this.installApp}>다운로드</button>
-        <br></br>
-        <div>Token: {this.state.token}</div>
-        <br></br>
-
-        <Link href="/secret" prefetch={false}>
-          <a>Secret page</a>
-        </Link>
-      </div>
-    );
-  }
+      <Link href="/secret">
+        <a>Secret page</a>
+      </Link>
+    </div>
+  );
 }
 
 export default Index;
